@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+{% block title %}Request Collection - Waste2Craft{% endblock %}
+{% block content %}
+    <section class="request-collection max-w-md mx-auto bg-white p-6 rounded-lg shadow-md">
+        <h2 class="text-2xl font-semibold mb-4 text-center">Request Waste Collection</h2>
+        <form method="POST" enctype="multipart/form-data" class="space-y-4">
+            {{ form.hidden_tag() }}
+            <div>
+                <label for="{{ form.waste_details.id }}" class="block text-sm font-medium">{{ form.waste_details.label }}</label>
+                {{ form.waste_details(class="mt-1 block w-full p-2 border rounded-lg") }}
+                {% for error in form.waste_details.errors %}
+                    <span class="text-red-500 text-sm">{{ error }}</span>
+                {% endfor %}
+            </div>
+            <div>
+                <label for="{{ form.weight.id }}" class="block text-sm font-medium">{{ form.weight.label }}</label>
+                {{ form.weight(class="mt-1 block w-full p-2 border rounded-lg") }}
+                {% for error in form.weight.errors %}
+                    <span class="text-red-500 text-sm">{{ error }}</span>
+                {% endfor %}
+            </div>
+            <div>
+                <label for="{{ form.waste_type.id }}" class="block text-sm font-medium">{{ form.waste_type.label }}</label>
+                {{ form.waste_type(class="mt-1 block w-full p-2 border rounded-lg") }}
+                {% for error in form.waste_type.errors %}
+                    <span class="text-red-500 text-sm">{{ error }}</span>
+                {% endfor %}
+            </div>
+            <div>
+                <label for="{{ form.image.id }}" class="block text-sm font-medium">{{ form.image.label }}</label>
+                {{ form.image(class="mt-1 block w-full p-2", id="image-upload") }}
+                <img id="image-preview" class="mt-2 w-full h-48 object-cover rounded-lg hidden" alt="Image Preview">
+                {% for error in form.image.errors %}
+                    <span class="text-red-500 text-sm">{{ error }}</span>
+                {% endfor %}
+            </div>
+            {{ form.submit(class="w-full bg-green-500 text-white p-2 rounded-lg hover:bg-green-600 transition") }}
+        </form>
+    </section>
+{% endblock %}

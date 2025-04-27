@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block content %}
+<main>
+    <h2>List Waste</h2>
+    <form method="POST" enctype="multipart/form-data" class="waste-form">
+        {{ form.hidden_tag() }}
+        <div class="form-group">
+            <label for="material">Material</label>
+            {{ form.material(class="form-control") }}
+        </div>
+        <div class="form-group">
+            <label for="weight">Weight (kg)</label>
+            {{ form.weight(class="form-control") }}
+        </div>
+        <div class="form-group">
+            <label for="price">Price ($)</label>
+            {{ form.price(class="form-control") }}
+        </div>
+        <div class="form-group">
+            <label for="description">Description</label>
+            {{ form.description(class="form-control") }}
+        </div>
+        <div class="form-group">
+            <label for="image">Image</label>
+            {{ form.image(class="form-control") }}
+        </div>
+        <button type="submit" class="btn">Submit Listing</button>
+    </form>
+</main>
+{% endblock %}

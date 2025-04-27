@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+{% block title %}Cart - Waste2Craft{% endblock %}
+{% block content %}
+    <section class="cart py-8">
+        <h2 class="text-3xl font-semibold mb-6 text-center">Your Cart</h2>
+        {% if cart_items %}
+            <div class="overflow-x-auto">
+                <table class="w-full bg-white rounded-lg shadow-md">
+                    <thead>
+                        <tr class="bg-green-500 text-white">
+                            <th class="p-3">Item</th>
+                            <th class="p-3">Quantity</th>
+                            <th class="p-3">Price</th>
+                            <th class="p-3">Total</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for item in cart_items %}
+                            <tr class="border-b">
+                                <td class="p-3">
+                                    {% if item.waste_listing %}
+                                        {{ item.waste_listing.title }}
+                                    {% elif item.product %}
+                                        {{ item.product.name }}
+                                    {% endif %}
+                                </td>
+                                <td class="p-3">{{ item.quantity }}</td>
+                                <td class="p-3">
+                                    {% if item.waste_listing %}
+                                        ₹{{ item.waste_listing.price }}
+                                    {% elif item.product %}
+                                        ₹{{ item.product.price }}
+                                    {% endif %}
+                                </td>
+                                <td class="p-3">
+                                    {% if item.waste_listing %}
+                                        ₹{{ item.waste_listing.price * item.quantity }}
+                                    {% elif item.product %}
+                                        ₹{{ item.product.price * item.quantity }}
+                                    {% endif %}
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <p class="text-xl font-semibold mt-4 text-center">Total: ₹{{ total }}</p>
+            <div class="flex justify-center mt-4">
+                <a href="{{ url_for('checkout') }}" class="bg-green-500 text-white px-6 py-3 rounded-lg hover:bg-green-600 transition">Proceed to Checkout</a>
+            </div>
+        {% else %}
+            <p class="text-center text-gray-600">Your cart is empty.</p>
+            <div class="flex justify-center mt-4">
+                {% if current_user.role == 'customer' %}
+                    <a href="{{ url_for('eco_marketplace') }}" class="bg-green-500 text-white px-6 py-3 rounded-lg hover:bg-green-600 transition">Browse Eco-Products</a>
+                {% elif current_user.role == 'waste_buyer' %}
+                    <a href="{{ url_for('browse_waste') }}" class="bg-green-500 text-white px-6 py-3 rounded-lg hover:bg-green-600 transition">Browse Waste Listings</a>
+                {% endif %}
+            </div>
+        {% endif %}
+    </section>
+{% endblock %}

@@ -1,0 +1,103 @@
+{% extends 'base.html' %}
+{% block title %}Staff Dashboard - Waste2Craft{% endblock %}
+{% block content %}
+    <section class="dashboard py-8">
+        <h2 class="text-3xl font-semibold mb-6 text-center">Welcome, {{ current_user.username }}!</h2>
+        <h3 class="text-xl font-medium mb-4">Your Options</h3>
+        <div class="dashboard-options flex flex-wrap gap-4 mb-8 justify-center">
+            <a href="{{ url_for('list_waste') }}" class="bg-green-500 text-white px-6 py-3 rounded-lg hover:bg-green-600 transition">List Waste</a>
+            <a href="{{ url_for('add_product') }}" class="bg-green-500 text-white px-6 py-3 rounded-lg hover:bg-green-600 transition">Add Product</a>
+        </div>
+        <h3 class="text-xl font-medium mb-4">Waste Collections</h3>
+        {% if collections %}
+            <div class="overflow-x-auto">
+                <table class="w-full bg-white rounded-lg shadow-md">
+                    <thead>
+                        <tr class="bg-green-500 text-white">
+                            <th class="p-3">Image</th>
+                            <th class="p-3">Seller</th>
+                            <th class="p-3">Waste Details</th>
+                            <th class="p-3">Weight (kg)</th>
+                            <th class="p-3">Type</th>
+                            <th class="p-3">Status</th>
+                            <th class="p-3">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for collection in collections %}
+                            <tr class="border-b">
+                                <td class="p-3">
+                                    {% if collection.image_path %}
+                                        <img src="{{ url_for('static', filename=collection.image_path) }}" alt="Waste Image" class="w-20 h-20 object-cover rounded">
+                                    {% else %}
+                                        <span>No image</span>
+                                    {% endif %}
+                                </td>
+                                <td class="p-3">{{ collection.seller.username }}</td>
+                                <td class="p-3">{{ collection.waste_details }}</td>
+                                <td class="p-3">{{ collection.weight }}</td>
+                                <td class="p-3">{{ collection.waste_type | capitalize }}</td>
+                                <td class="p-3">{{ collection.status }}</td>
+                                <td class="p-3">
+                                    {% if collection.status == 'pending' %}
+                                        <form action="{{ url_for('collect_waste', collection_id=collection.id) }}" method="POST">
+                                            <button type="submit" class="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 transition">Collect</button>
+                                        </form>
+                                    {% elif collection.status == 'collected' %}
+                                        <form action="{{ url_for('approve_waste', collection_id=collection.id) }}" method="POST">
+                                            <button type="submit" class="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 transition">Approve</button>
+                                        </form>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% else %}
+            <p class="text-center text-gray-600">No waste collections available.</p>
+        {% endif %}
+        <h3 class="text-xl font-medium mb-4 mt-8">Waste Listings</h3>
+        <div class="listings grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {% if listings %}
+                {% for listing in listings %}
+                    <div class="listing bg-white p-4 rounded-lg shadow-md hover:shadow-lg transition">
+                        {% if listing.image_path %}
+                            <img src="{{ url_for('static', filename=listing.image_path) }}" alt="{{ listing.title }}"
+                                 class="w-full h-48 object-cover rounded-lg mb-4">
+                        {% else %}
+                            <p class="text-gray-500 italic text-center mb-4">No image available</p>
+                        {% endif %}
+                        <h4 class="text-xl font-medium mb-2">{{ listing.title }}</h4>
+                        <p class="text-gray-600 mb-2">{{ listing.description }}</p>
+                        <p class="mb-2">Category: {{ listing.category | capitalize }}</p>
+                        <p class="mb-2">Quantity: {{ listing.quantity }}</p>
+                        <p class="text-lg font-semibold mb-4">Price: ₹{{ listing.price }}</p>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <p class="text-center text-gray-600">No waste listings available.</p>
+            {% endif %}
+        </div>
+        <h3 class="text-xl font-medium mb-4 mt-8">Eco-Products</h3>
+        <div class="products grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {% if products %}
+                {% for product in products %}
+                    <div class="product bg-white p-4 rounded-lg shadow-md hover:shadow-lg transition">
+                        {% if product.image_path %}
+                            <img src="{{ url_for('static', filename=product.image_path) }}" alt="{{ product.name }}"
+                                 class="w-full h-48 object-cover rounded-lg mb-4">
+                        {% else %}
+                            <p class="text-gray-500 italic text-center mb-4">No image available</p>
+                        {% endif %}
+                        <h4 class="text-xl font-medium mb-2">{{ product.name }}</h4>
+                        <p class="text-gray-600 mb-2">{{ product.description }}</p>
+                        <p class="text-lg font-semibold mb-4">Price: ₹{{ product.price }}</p>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <p class="text-center text-gray-600">No eco-products available.</p>
+            {% endif %}
+        </div>
+    </section>
+{% endblock %}

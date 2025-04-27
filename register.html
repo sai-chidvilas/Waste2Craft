@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{% block title %}Register{% endblock %}
+{% block content %}
+    <section class="register max-w-md mx-auto bg-white p-6 rounded-lg shadow-md">
+        <h2 class="text-2xl font-semibold mb-4 text-center">Register</h2>
+        <form method="POST" class="space-y-4">
+            {{ form.hidden_tag() }}
+            <div>
+                <label for="{{ form.username.id }}" class="block text-sm font-medium">{{ form.username.label }}</label>
+                {{ form.username(class="mt-1 block w-full p-2 border rounded-lg") }}
+                {% for error in form.username.errors %}
+                    <span class="text-red-500 text-sm">{{ error }}</span>
+                {% endfor %}
+            </div>
+            <div>
+                <label for="{{ form.password.id }}" class="block text-sm font-medium">{{ form.password.label }}</label>
+                {{ form.password(class="mt-1 block w-full p-2 border rounded-lg") }}
+                {% for error in form.password.errors %}
+                    <span class="text-red-500 text-sm">{{ error }}</span>
+                {% endfor %}
+            </div>
+            <div>
+                <label for="{{ form.role.id }}" class="block text-sm font-medium">{{ form.role.label }}</label>
+                {{ form.role(class="mt-1 block w-full p-2 border rounded-lg") }}
+                {% for error in form.role.errors %}
+                    <span class="text-red-500 text-sm">{{ error }}</span>
+                {% endfor %}
+            </div>
+            {{ form.submit(class="w-full bg-green-500 text-white p-2 rounded-lg hover:bg-green-600 transition") }}
+        </form>
+    </section>
+{% endblock %}

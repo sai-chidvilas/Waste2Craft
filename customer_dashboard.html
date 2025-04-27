@@ -1,0 +1,75 @@
+{% extends 'base.html' %}
+{% block title %}Customer Dashboard - Waste2Craft{% endblock %}
+{% block content %}
+    <section class="dashboard py-8">
+        <h2 class="text-3xl font-semibold mb-6 text-center">Welcome, {{ current_user.username }}!</h2>
+        <h3 class="text-xl font-medium mb-4">Your Options</h3>
+        <div class="dashboard-options flex flex-wrap gap-4 mb-8 justify-center">
+            <a href="{{ url_for('request_collection') }}" class="bg-green-500 text-white px-6 py-3 rounded-lg hover:bg-green-600 transition">Request Waste Collection</a>
+            <a href="{{ url_for('eco_marketplace') }}" class="bg-green-500 text-white px-6 py-3 rounded-lg hover:bg-green-600 transition">Browse Eco-Products</a>
+            <a href="{{ url_for('view_cart') }}" class="bg-green-500 text-white px-6 py-3 rounded-lg hover:bg-green-600 transition">View Cart</a>
+        </div>
+        <h3 class="text-xl font-medium mb-4">Your Waste Collections</h3>
+        {% if collections %}
+            <div class="overflow-x-auto">
+                <table class="w-full bg-white rounded-lg shadow-md">
+                    <thead>
+                        <tr class="bg-green-500 text-white">
+                            <th class="p-3">Image</th>
+                            <th class="p-3">Waste Details</th>
+                            <th class="p-3">Weight (kg)</th>
+                            <th class="p-3">Type</th>
+                            <th class="p-3">Status</th>
+                            <th class="p-3">Date</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for collection in collections %}
+                            <tr class="border-b">
+                                <td class="p-3">
+                                    {% if collection.image_path %}
+                                        <img src="{{ url_for('static', filename=collection.image_path) }}" alt="Waste Image" class="w-20 h-20 object-cover rounded">
+                                    {% else %}
+                                        <span>No image</span>
+                                    {% endif %}
+                                </td>
+                                <td class="p-3">{{ collection.waste_details }}</td>
+                                <td class="p-3">{{ collection.weight }}</td>
+                                <td class="p-3">{{ collection.waste_type | capitalize }}</td>
+                                <td class="p-3">{{ collection.status }}</td>
+                                <td class="p-3">{{ collection.collection_date | default('Pending') }}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% else %}
+            <p class="text-center text-gray-600">No waste collections requested.</p>
+        {% endif %}
+        <h3 class="text-xl font-medium mb-4 mt-8">Your Payouts</h3>
+        {% if payouts %}
+            <div class="overflow-x-auto">
+                <table class="w-full bg-white rounded-lg shadow-md">
+                    <thead>
+                        <tr class="bg-green-500 text-white">
+                            <th class="p-3">Amount</th>
+                            <th class="p-3">Status</th>
+                            <th class="p-3">Date</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for payout in payouts %}
+                            <tr class="border-b">
+                                <td class="p-3">₹{{ payout.amount }}</td>
+                                <td class="p-3">{{ payout.status }}</td>
+                                <td class="p-3">{{ payout.created_at }}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% else %}
+            <p class="text-center text-gray-600">No payouts received.</p>
+        {% endif %}
+    </section>
+{% endblock %}

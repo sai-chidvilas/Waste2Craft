@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+{% block title %}Browse Waste - Waste2Craft{% endblock %}
+{% block content %}
+    <section class="browse-waste py-8">
+        <h2 class="text-3xl font-semibold mb-6 text-center">Browse Waste Listings</h2>
+        <form method="GET" class="search-form flex flex-wrap gap-4 mb-8 justify-center">
+            <input type="text" name="search" placeholder="Search waste..." value="{{ request.args.get('search', '') }}"
+                   class="p-2 border rounded-lg flex-grow" id="waste-search">
+            <select name="category" class="p-2 border rounded-lg">
+                <option value="">All Categories</option>
+                {% for category in categories %}
+                    <option value="{{ category }}" {% if category == request.args.get('category') %}selected{% endif %}>{{ category | capitalize }}</option>
+                {% endfor %}
+            </select>
+            <button type="submit" class="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 transition">Search</button>
+        </form>
+        <div class="listings grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {% if listings %}
+                {% for listing in listings %}
+                    <div class="listing bg-white p-4 rounded-lg shadow-md hover:shadow-lg transition waste-item"
+                         data-title="{{ listing.title | lower }}" data-category="{{ listing.category | lower }}">
+                        {% if listing.image_path %}
+                            <img src="{{ url_for('static', filename=listing.image_path) }}" alt="{{ listing.title }}"
+                                 class="w-full h-48 object-cover rounded-lg mb-4">
+                        {% else %}
+                            <p class="text-gray-500 italic text-center mb-4">No image available</p>
+                        {% endif %}
+                        <h3 class="text-xl font-medium mb-2">{{ listing.title }}</h3>
+                        <p class="text-gray-600 mb-2">{{ listing.description }}</p>
+                        <p class="mb-2">Category: {{ listing.category | capitalize }}</p>
+                        <p class="mb-2">Quantity: {{ listing.quantity }}</p>
+                        <p class="text-lg font-semibold mb-4">Price: ₹{{ listing.price }}</p>
+                        <form action="{{ url_for('add_to_cart', item_type='waste', item_id=listing.id) }}" method="POST">
+                            <button type="submit" class="w-full bg-green-500 text-white p-2 rounded-lg hover:bg-green-600 transition">Add to Cart</button>
+                        </form>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <p class="text-center text-gray-600">No waste listings found.</p>
+            {% endif %}
+        </div>
+    </section>
+{% endblock %}

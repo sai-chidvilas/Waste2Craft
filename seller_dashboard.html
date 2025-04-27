@@ -1,0 +1,52 @@
+<!-- templates/seller_dashboard.html -->
+{% extends 'base.html' %}
+{% block title %}Seller Dashboard - Waste2Craft{% endblock %}
+{% block content %}
+    <section class="dashboard">
+        <h2>Seller Dashboard</h2>
+        <p>Welcome, {{ current_user.username }}!</p>
+        <a href="{{ url_for('request_collection') }}" class="btn">Request Waste Collection</a>
+        <h3>Your Collection Requests</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Details</th>
+                    <th>Weight (kg)</th>
+                    <th>Type</th>
+                    <th>Status</th>
+                    <th>Collection Date</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for collection in collections %}
+                    <tr>
+                        <td>{{ collection.waste_details }}</td>
+                        <td>{{ collection.weight }}</td>
+                        <td>{{ collection.waste_type }}</td>
+                        <td>{{ collection.status }}</td>
+                        <td>{{ collection.collection_date.strftime('%Y-%m-%d %H:%M:%S') if collection.collection_date else 'N/A' }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <h3>Your Payouts</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Amount</th>
+                    <th>Status</th>
+                    <th>Date</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for payout in payouts %}
+                    <tr>
+                        <td>${{ payout.amount }}</td>
+                        <td>{{ payout.status }}</td>
+                        <td>{{ payout.created_at.strftime('%Y-%m-%d %H:%M:%S') }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </section>
+{% endblock %}

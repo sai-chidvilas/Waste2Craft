@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% block title %}Eco-Marketplace - Waste2Craft{% endblock %}
+{% block content %}
+    <section class="eco-marketplace py-8">
+        <h2 class="text-3xl font-semibold mb-6 text-center">Eco-Marketplace</h2>
+        <form method="GET" class="search-form flex flex-wrap gap-4 mb-8 justify-center">
+            <input type="text" name="search" placeholder="Search products..." value="{{ request.args.get('search', '') }}"
+                   class="p-2 border rounded-lg flex-grow" id="product-search">
+            <button type="submit" class="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 transition">Search</button>
+        </form>
+        <div class="products grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {% if products %}
+                {% for product in products %}
+                    <div class="product bg-white p-4 rounded-lg shadow-md hover:shadow-lg transition product-item"
+                         data-name="{{ product.name | lower }}">
+                        {% if product.image_path %}
+                            <img src="{{ url_for('static', filename=product.image_path) }}" alt="{{ product.name }}"
+                                 class="w-full h-48 object-cover rounded-lg mb-4">
+                        {% else %}
+                            <p class="text-gray-500 italic text-center mb-4">No image available</p>
+                        {% endif %}
+                        <h3 class="text-xl font-medium mb-2">{{ product.name }}</h3>
+                        <p class="text-gray-600 mb-2">{{ product.description }}</p>
+                        <p class="text-lg font-semibold mb-4">Price: ₹{{ product.price }}</p>
+                        <form action="{{ url_for('add_to_cart', item_type='product', item_id=product.id) }}" method="POST">
+                            <button type="submit" class="w-full bg-green-500 text-white p-2 rounded-lg hover:bg-green-600 transition">Add to Cart</button>
+                        </form>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <p class="text-center text-gray-600">No products found.</p>
+            {% endif %}
+        </div>
+    </section>
+{% endblock %}

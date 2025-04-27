@@ -1,0 +1,26 @@
+<!-- templates/dashboard.html -->
+{% extends 'base.html' %}
+{% block title %}Dashboard - Waste2Craft{% endblock %}
+{% block content %}
+    <section class="dashboard">
+        <h2>Welcome, {{ current_user.username }}!</h2>
+        {% if current_user.role == 'seller' %}
+            <h3>Your Waste Listings</h3>
+            <a href="{{ url_for('list_waste') }}" class="btn">List New Waste</a>
+            <div class="listing-grid">
+                {% for listing in listings %}
+                    <div class="listing">
+                        <h4>{{ listing.title }}</h4>
+                        <p>{{ listing.description }}</p>
+                        <p>Category: {{ listing.category }}</p>
+                        <p>Quantity: {{ listing.quantity }}</p>
+                        <p>Price: ${{ listing.price }}</p>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <h3>Available Waste Listings</h3>
+            <p>Browse waste materials below or use the <a href="{{ url_for('dashboard') }}">Browse Waste</a> page.</p>
+        {% endif %}
+    </section>
+{% endblock %}

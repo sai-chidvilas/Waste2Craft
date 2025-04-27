@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+{% block title %}Waste Buyer Dashboard - Waste2Craft{% endblock %}
+{% block content %}
+    <section class="dashboard py-8">
+        <h2 class="text-3xl font-semibold mb-6 text-center">Welcome, {{ current_user.username }}!</h2>
+        <h3 class="text-xl font-medium mb-4">Your Options</h3>
+        <div class="dashboard-options flex flex-wrap gap-4 mb-8 justify-center">
+            <a href="{{ url_for('browse_waste') }}" class="bg-green-500 text-white px-6 py-3 rounded-lg hover:bg-green-600 transition">Browse Waste Listings</a>
+            <a href="{{ url_for('view_cart') }}" class="bg-green-500 text-white px-6 py-3 rounded-lg hover:bg-green-600 transition">View Cart</a>
+        </div>
+    </section>
+{% endblock %}
